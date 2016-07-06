@@ -11,6 +11,8 @@ NMEA_data_stuct* 	nmeaHeaderFinder 	(INT8 *);
 
 UINT16	number_of_msgs = sizeof(NMEA_info)/sizeof(NMEA_data_stuct);
 
+void hexToDecimal (INT8 *, INT16 , INT8 *);
+
 main ()
 {
 	FILE 	*fp;
@@ -94,7 +96,24 @@ NMEA_data_stuct* nmeaHeaderFinder (INT8 *NMEA_string)
 
 void gpzdaMsgExtract (INT8 *NMEA_string)
 {
+	INT8 decimal_array[20] = {0};
+	INT16 index = 0;
+	
 	printf ("So, Here we come to extract GPZDA");
+	
+	/* Not only this is incrementing the pointer but at the end of finding 
+	comma, it is also skipping it!! */
+	while (*NMEA_string++ != ',');
+		
+	hexToDecimal(NMEA_string, 9, decimal_array);
+	
+	NMEA_data_stuct_ptr->hour 	= (decimal_array[0] * 10) + decimal_array[1];
+	NMEA_data_stuct_ptr->min 	= (decimal_array[2] * 10) + decimal_array[3];
+	NMEA_data_stuct_ptr->sec 	= (decimal_array[4] * 10) + decimal_array[5];
+	
+	printf ("Hour = %d\n", NMEA_data_stuct_ptr->hour);
+	printf ("Min  = %d\n", NMEA_data_stuct_ptr->min);
+	printf ("Sec  = %d\n", NMEA_data_stuct_ptr->sec);
 }
 
 void gpggaMsgExtract (INT8 *NMEA_string)
@@ -102,6 +121,27 @@ void gpggaMsgExtract (INT8 *NMEA_string)
 	printf ("So, Here we come to extract GPGGA");
 }
 
+void hexToDecimal (INT8 *NMEA_string, INT16 number_of_bytes, INT8 *decimal_array)
+{
+	printf ("\n");
+	while (number_of_bytes)
+	{
+		if (*NMEA_string >= 'a' && *NMEA_string <= 'f')
+		{
+			*decimal_array = *NMEA_string - 'a' + 10;
+			printf ("I should never come here");
+		}
+		
+		else
+		{
+			*decimal_array = *NMEA_string - '0';
+		}
+		
+		number_of_bytes--;
+		decimal_array++;
+		NMEA_string++;
+	}
+}
 
 /* int LocalStringCompare (INT8 *array_1, INT8 *array_2)
 {
