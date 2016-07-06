@@ -111,9 +111,27 @@ void gpzdaMsgExtract (INT8 *NMEA_string)
 	NMEA_data_stuct_ptr->min 	= (decimal_array[2] * 10) + decimal_array[3];
 	NMEA_data_stuct_ptr->sec 	= (decimal_array[4] * 10) + decimal_array[5];
 	
+	while (*NMEA_string++ != ',');
+	
+	hexToDecimal(NMEA_string, 10, decimal_array);
+	
+	NMEA_data_stuct_ptr->day	= (decimal_array[0] * 10) + decimal_array[1];
+	NMEA_data_stuct_ptr->month	= (decimal_array[2] * 10) + decimal_array[3];
+	NMEA_data_stuct_ptr->year	= (decimal_array[4] * 1000) + (decimal_array[5] * 100)\
+								  + (decimal_array[6] * 10) + (decimal_array[7] * 1)	;
+	
+	#ifdef DEBUG_PRINT
+	
+	printf ("From GPZDA\n");
+
 	printf ("Hour = %d\n", NMEA_data_stuct_ptr->hour);
 	printf ("Min  = %d\n", NMEA_data_stuct_ptr->min);
 	printf ("Sec  = %d\n", NMEA_data_stuct_ptr->sec);
+	printf ("Day  = %d\n", NMEA_data_stuct_ptr->day);
+	printf ("Month= %d\n", NMEA_data_stuct_ptr->month);
+	printf ("Year = %d\n", NMEA_data_stuct_ptr->year);
+	
+	#endif
 }
 
 void gpggaMsgExtract (INT8 *NMEA_string)
@@ -132,14 +150,26 @@ void hexToDecimal (INT8 *NMEA_string, INT16 number_of_bytes, INT8 *decimal_array
 			printf ("I should never come here");
 		}
 		
-		else
+		else if (*NMEA_string >= '0' && *NMEA_string <= '9')
 		{
 			*decimal_array = *NMEA_string - '0';
 		}
 		
+		else
+		{
+			/* Do nothing just go to next byte*/
+			number_of_bytes--;
+			NMEA_string++;
+			
+			/* Here comes the magic! it skips next few lines if it is '.'
+			or ',' or something else!! */
+			continue; 
+		}
+		
 		number_of_bytes--;
-		decimal_array++;
 		NMEA_string++;
+		decimal_array++;
+		
 	}
 }
 
