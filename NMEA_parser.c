@@ -94,12 +94,12 @@ NMEA_data_stuct* nmeaHeaderFinder (INT8 *NMEA_string)
 	
 }
 
-void gpzdaMsgExtract (INT8 *NMEA_string)
+void zdaMsgExtract (INT8 *NMEA_string)
 {
 	INT8 decimal_array[20] = {0};
 	INT16 index = 0;
 	
-	printf ("So, Here we come to extract GPZDA");
+	printf ("So, Here we come to extract %s", NMEA_data_stuct_ptr->msg);
 	
 	/* Not only this is incrementing the pointer but at the end of finding 
 	comma, it is also skipping it!! */
@@ -122,7 +122,7 @@ void gpzdaMsgExtract (INT8 *NMEA_string)
 	
 	#ifdef DEBUG_PRINT
 	
-	printf ("From GPZDA\n");
+	printf ("From ZDA\n");
 
 	printf ("Hour = %d\n", NMEA_data_stuct_ptr->hour);
 	printf ("Min  = %d\n", NMEA_data_stuct_ptr->min);
@@ -134,7 +134,7 @@ void gpzdaMsgExtract (INT8 *NMEA_string)
 	#endif
 }
 
-void gpggaMsgExtract (INT8 *NMEA_string)
+void ggaMsgExtract (INT8 *NMEA_string)
 {
 	printf ("So, Here we come to extract GPGGA");
 }

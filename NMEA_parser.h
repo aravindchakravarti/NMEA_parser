@@ -8,8 +8,8 @@ typedef int 			INT32;
 typedef short 			INT16;
 typedef char			INT8;
 
-void				gpzdaMsgExtract		(INT8 *);
-void				gpggaMsgExtract		(INT8 *);
+void				zdaMsgExtract		(INT8 *);
+void				ggaMsgExtract		(INT8 *);
 
 typedef struct 
 {
@@ -33,13 +33,19 @@ NMEA_data_stuct NMEA_info[] =
 	{
 		"$GPZDA", \
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
-		&gpzdaMsgExtract,
+		&zdaMsgExtract,
 	}
 	,
 	{
 		"$GPGGA", \
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
-		&gpggaMsgExtract,
+		&ggaMsgExtract,
+	}
+	,
+	{
+		"$GLZDA", \
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+		&zdaMsgExtract,
 	}
 };
 
